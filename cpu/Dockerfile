@@ -9,7 +9,8 @@ RUN apt-get update -y && apt-get install -y sudo bzip2 wget htop libzmq3-dev bui
 # Anaconda with Jupyter
 ENV CONDA="Miniconda3-latest-Linux-x86_64.sh"
 RUN wget --quiet https://repo.continuum.io/miniconda/${CONDA} && /bin/bash /${CONDA} -b -p /miniconda3 && /miniconda3/bin/conda install -y jupyter
-　
+RUN chown -R ubuntu /home/ubuntu
+
 # Julia
 ENV JULIA="0.6/julia-0.6.0-linux-x86_64.tar.gz"
 RUN mkdir /julia && curl -L https://julialang.s3.amazonaws.com/bin/linux/x64/${JULIA} \
