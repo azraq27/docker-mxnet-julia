@@ -9,7 +9,7 @@ RUN apt-get update -y && apt-get install -y sudo bzip2 wget htop libzmq3-dev bui
 # Anaconda with Jupyter
 ENV CONDA="Miniconda3-latest-Linux-x86_64.sh"
 RUN wget --quiet https://repo.continuum.io/miniconda/${CONDA} && /bin/bash /${CONDA} -b -p /miniconda3 && /miniconda3/bin/conda install -y jupyter
-RUN chown -R ubuntu /home/ubuntu
+RUN chown -R ubuntu /miniconda3
 
 # Julia
 ENV JULIA="0.6/julia-0.6.1-linux-x86_64.tar.gz"
@@ -25,8 +25,11 @@ RUN chown -R ubuntu /home/ubuntu
 RUN echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 RUN echo 'export MXNET_HOME=/mxnet' >> /home/ubuntu/.bashrc
-RUN sudo -u ubuntu -H MXNET_HOME="/mxnet" /julia/bin/julia -e 'Pkg.add("MXNet")'
+# Get the latest commit, the last version release doesn't work with Julia 0.6
+RUN sudo -u ubuntu -H MXNET_HOME="/mxnet" /julia/bin/julia -e 'Pkg.checkout("MXNet"); using MXNet'
 
+# Stupid annoying bug
+RUN ln /dev/null /dev/raw1394
 
 
 USER ubuntu
