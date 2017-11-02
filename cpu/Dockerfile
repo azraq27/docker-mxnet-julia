@@ -14,7 +14,7 @@ RUN wget --quiet https://repo.continuum.io/miniconda/${CONDA} && /bin/bash /${CO
 ENV JULIA="0.6/julia-0.6.0-linux-x86_64.tar.gz"
 RUN mkdir /julia && curl -L https://julialang.s3.amazonaws.com/bin/linux/x64/${JULIA} \
     | tar zxC /julia --strip-components=1 && \
-    sudo -u ubuntu -H PATH="/miniconda3/bin:$PATH" /julia/bin/julia -e 'Pkg.update(); for p in ["ZMQ","JSON","TimeZones","HDF5","IJulia","Distributions","SQLite","PyPlot","HypothesisTests","ParallelDataTransfer","AbstractTrees","Requests","Gumbo","OAuth","NLopt","PyCall","Nettle","ArgParse","ClusterManagers","JLD","Distances"]; Pkg.add(p); end'
+    sudo -u ubuntu -H PATH="/miniconda3/bin:$PATH" /julia/bin/julia -e 'Pkg.update(); for p in ["ZMQ","JSON","TimeZones","HDF5","IJulia","Distributions","SQLite","PyPlot","HypothesisTests","ParallelDataTransfer","AbstractTrees","Requests","Gumbo","OAuth","NLopt","PyCall","Nettle","ArgParse","ClusterManagers","JLD","Distances"]; Pkg.add(p); eval(Expr(:toplevel,Expr(:using,Symbol(p))));end'
 　
 RUN echo 'export PATH=/miniconda3/bin:$PATH' >> /home/ubuntu/.bashrc
 RUN echo 'export PATH=/julia/bin:$PATH' >> /home/ubuntu/.bashrc
@@ -24,7 +24,9 @@ RUN chown -R ubuntu /home/ubuntu
 RUN echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 RUN echo 'export MXNET_HOME=/mxnet' >> /home/ubuntu/.bashrc
-RUN /julia/bin/julia -e 'ENV["MXNET_HOME"]="/mxnet"; Pkg.add("MXNet")'
+RUN sudo -u ubuntu -H MXNET_HOME="/mxnet" /julia/bin/julia -e 'Pkg.add("MXNet")'
+
+
 
 USER ubuntu
 WORKDIR /home/ubuntu/
