@@ -12,7 +12,7 @@ RUN wget --quiet https://repo.continuum.io/miniconda/${CONDA} && /bin/bash /${CO
 RUN chown -R ubuntu /home/ubuntu
 
 # Julia
-ENV JULIA="0.6/julia-0.6.0-linux-x86_64.tar.gz"
+ENV JULIA="0.6/julia-0.6.1-linux-x86_64.tar.gz"
 RUN mkdir /julia && curl -L https://julialang.s3.amazonaws.com/bin/linux/x64/${JULIA} \
     | tar zxC /julia --strip-components=1 && \
     sudo -u ubuntu -H PATH="/miniconda3/bin:$PATH" /julia/bin/julia -e 'Pkg.update(); for p in ["ZMQ","JSON","TimeZones","HDF5","IJulia","Distributions","SQLite","PyPlot","HypothesisTests","ParallelDataTransfer","AbstractTrees","Requests","Gumbo","OAuth","NLopt","PyCall","Nettle","ArgParse","ClusterManagers","JLD","Distances"]; Pkg.add(p); eval(Expr(:toplevel,Expr(:using,Symbol(p))));end'
