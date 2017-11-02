@@ -24,7 +24,7 @@ RUN chown -R ubuntu /home/ubuntu
 RUN echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 RUN echo 'export MXNET_HOME=/mxnet' >> /home/ubuntu/.bashrc
-RUN /julia/bin/julia -e 'ENV["MXNET_HOME"]="/mxnet"; Pkd.add("MXNet")'
+RUN /julia/bin/julia -e 'ENV["MXNET_HOME"]="/mxnet"; Pkg.add("MXNet")'
 
 USER ubuntu
 WORKDIR /home/ubuntu/
