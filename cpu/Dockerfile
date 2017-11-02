@@ -26,7 +26,7 @@ RUN echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 RUN echo 'export MXNET_HOME=/mxnet' >> /home/ubuntu/.bashrc
 # Get the latest commit, the last version release doesn't work with Julia 0.6
-RUN sudo -u ubuntu -H MXNET_HOME="/mxnet" /julia/bin/julia -e 'Pkg.checkout("MXNet"); using MXNet'
+RUN sudo -u ubuntu -H MXNET_HOME="/mxnet" /julia/bin/julia -e 'Pkg.add("MXNet"); Pkg.checkout("MXNet"); using MXNet'
 
 # Stupid annoying bug
 RUN ln /dev/null /dev/raw1394
